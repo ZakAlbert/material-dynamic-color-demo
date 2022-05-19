@@ -27,9 +27,9 @@ const API_MOVIES: TmdbApi.TmdbApi = new TmdbApi.TmdbApi(
   '5f3a6c8f58f5aa4231c3724fe54e387d'
 );
 
-API_MOVIES.search.tvshows('Pokemon').subscribe((response) => {
+API_MOVIES.search.tvshows('Dark').subscribe((response) => {
   if (response.total_results > 0) {
-    setDataMovie(response.results[1]);
+    setDataMovie(response.results[0]);
   } else {
   }
 });
@@ -41,24 +41,22 @@ const setDataMovie = async (data) => {
   setBackgroundImage(backdrop_path || poster_path);
   setPosterImage(poster_path);
 
-  const themeColors = await getColors(poster_path, 'light');
+  const themeColors = await getColors(poster_path, 'dark');
   setColorsToElement(themeColors);
   //setColorsView(themeColors);
   setColorsBox(themeColors);
   setColorCategory(themeColors);
 };
 
-const setTitle = (title: string) => {
-  header.innerText = title;
-};
+const setTitle = (title: string) => (header.innerText = title);
 
-const setDescription = (description: string) => {
-  subheader.innerText = description;
-};
+const setDescription = (description: string) =>
+  (subheader.innerText = description);
 
 const setBackgroundImage = (bgImage) => {
   document.body.style.backgroundImage = `url(${URL_IMAGE}${bgImage})`;
   document.body.style.backgroundSize = 'contain';
+  document.body.style.backgroundRepeat = 'no-repeat';
 };
 
 const setPosterImage = (posterImage) => {
@@ -79,6 +77,7 @@ const setColorsToElement = (themeColors) => {
     onPrimary,
     primary,
     background,
+    surfaceVariant,
   } = themeColors;
 
   appDiv.style.backgroundColor = primary;
@@ -88,9 +87,9 @@ const setColorsToElement = (themeColors) => {
   container.style.color = onPrimaryContainer;
 
   //containerColors.style.backgroundColor = primaryContainer;
-  //colorCategory.style.backgroundColor = primaryContainer;
-  //containerBox.style.backgroundColor = primaryContainer;
+  containerBox.style.backgroundColor = surfaceVariant;
 
+  colorCategory.style.backgroundColor = surfaceVariant;
   document.body.style.backgroundColor = background;
 };
 
@@ -140,7 +139,6 @@ const setColorCategory = (themeColors) => {
   colorCategory.appendChild(
     getColorTile('OnSecondary', onSecondary, secondary)
   );
-
   colorCategory.appendChild(
     getColorTile('SecondaryContainer', secondaryContainer, onSecondaryContainer)
   );
@@ -152,20 +150,67 @@ const setColorCategory = (themeColors) => {
     )
   );
 
+  colorCategory.appendChild(getColorTile('Tertiary', tertiary, onTertiary));
+  colorCategory.appendChild(getColorTile('OnTertiary', onTertiary, tertiary));
   colorCategory.appendChild(
     getColorTile('TertiaryContainer', tertiaryContainer, onTertiaryContainer)
   );
   colorCategory.appendChild(
     getColorTile('OnTertiaryContainer', onTertiaryContainer, tertiaryContainer)
   );
+
+  colorCategory.appendChild(getColorTile('Error', error, onError));
+  colorCategory.appendChild(getColorTile('OnError', onError, error));
+  colorCategory.appendChild(
+    getColorTile('ErrorContainer', errorContainer, onErrorContainer)
+  );
+  colorCategory.appendChild(
+    getColorTile('OnErrorContainer', onErrorContainer, errorContainer)
+  );
+
+  colorCategory.appendChild(getColorTile('Surface', surface, onSurface));
+  colorCategory.appendChild(getColorTile('OnSurface', onSurface, surface));
+
+  colorCategory.appendChild(
+    getColorTile('SurfaceVariant', surfaceVariant, onSurfaceVariant)
+  );
+  colorCategory.appendChild(
+    getColorTile('OnSurfaceVariant', onSurfaceVariant, surfaceVariant)
+  );
+
+  colorCategory.appendChild(
+    getColorTile('InverseSurface', inverseSurface, inverseOnSurface)
+  );
+  colorCategory.appendChild(
+    getColorTile('InverseOnSurface', inverseOnSurface, inverseSurface)
+  );
+
+  colorCategory.appendChild(
+    getColorTile('Background', background, onBackground)
+  );
+  colorCategory.appendChild(
+    getColorTile('OnBackground', onBackground, background)
+  );
+
+  colorCategory.appendChild(getColorTile('Outline', outline, 'white'));
+  colorCategory.appendChild(getColorTile('Shadow', shadow, 'white'));
 };
 
 const getColorTile = (name, color1, color2) => {
-  const pColor = document.createElement('p');
-  pColor.innerText = name;
-  pColor.style.backgroundColor = color1;
-  pColor.style.color = color2;
-  return pColor;
+  const div = document.createElement('div');
+  div.classList.add('swatch');
+  div.style.background = color1;
+  div.style.color = color2;
+
+  const p1 = document.createElement('p');
+  p1.classList.add('title');
+  p1.innerText = name;
+
+  const p2 = document.createElement('p');
+  p2.innerText = color1;
+
+  div.append(p1, p2);
+  return div;
 };
 
 const getColorDiv = (color1, color2) => {
