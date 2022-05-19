@@ -24,7 +24,8 @@ const subheader: HTMLElement = document.getElementById('Subheader');
 
 const URL_IMAGE = 'https://image.tmdb.org/t/p/w500';
 const API_MOVIES: TmdbApi.TmdbApi = new TmdbApi.TmdbApi(
-  '5f3a6c8f58f5aa4231c3724fe54e387d'
+  '5f3a6c8f58f5aa4231c3724fe54e387d',
+  'es-mx'
 );
 
 API_MOVIES.search.tvshows('Dark').subscribe((response) => {
