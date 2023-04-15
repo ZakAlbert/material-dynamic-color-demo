@@ -2,6 +2,12 @@
 import './style.css';
 import TmdbApi = require('tmdb-typescript-api');
 import 'material-dynamic-colors';
+import {
+  argbFromHex,
+  hexFromArgb,
+  themeFromImage,
+  themeFromSourceColor,
+} from '@material/material-color-utilities';
 
 // Write TypeScript code!
 const appDiv: HTMLElement = document.getElementById('app');
@@ -28,9 +34,14 @@ const API_MOVIES: TmdbApi.TmdbApi = new TmdbApi.TmdbApi(
   'es-mx'
 );
 
-API_MOVIES.search.tvshows('Dark').subscribe((response) => {
+type SchemeTheme = 'dark' | 'light';
+
+const movieName: string = 'Pokemon';
+const schemeTheme: SchemeTheme = 'light';
+
+API_MOVIES.search.movies(movieName).subscribe((response) => {
   if (response.total_results > 0) {
-    setDataMovie(response.results[0]);
+    setDataMovie(response.results[8]);
   } else {
   }
 });
@@ -42,10 +53,10 @@ const setDataMovie = async (data) => {
   setBackgroundImage(backdrop_path || poster_path);
   setPosterImage(poster_path);
 
-  const themeColors = await getColors(poster_path, 'dark');
+  const themeColors = await getColors(poster_path, schemeTheme);
   setColorsToElement(themeColors);
   //setColorsView(themeColors);
-  setColorsBox(themeColors);
+  //setColorsBox(themeColors);
   setColorCategory(themeColors);
 };
 
@@ -65,9 +76,11 @@ const setPosterImage = (posterImage) => {
   imageView.setAttribute('src', `${URL_IMAGE}${posterImage}`);
 };
 
-const getColors = async (image: string, theme: 'dark' | 'light') => {
+const getColors = async (image: string, theme: SchemeTheme) => {
   const url = `${URL_IMAGE}${image}`;
-  let colors = await materialDynamicColors(url);
+  const color = '#3a691e';
+
+  const colors = await materialDynamicColors(url);
   return colors[theme];
 };
 
@@ -93,7 +106,7 @@ const setColorsToElement = (themeColors) => {
   colorCategory.style.backgroundColor = surfaceVariant;
   document.body.style.backgroundColor = background;
 };
-
+/*
 const setColorsView = (themeColors) => {
   containerColors.innerHTML = '';
   Object.entries(themeColors).forEach(([key, value]) => {
@@ -105,7 +118,7 @@ const setColorsView = (themeColors) => {
 
     containerColors.appendChild(divColor);
   });
-};
+};*/
 
 const setColorCategory = (themeColors) => {
   const { primary, onPrimary } = themeColors;

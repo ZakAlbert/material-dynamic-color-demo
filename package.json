@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "material-dynamic-colors": "^0.0.10",
+    "@material/material-color-utilities": "^0.2.5",
+    "material-dynamic-colors": "^0.1.7",
     "tmdb-typescript-api": "^0.0.5"
   }
 }
